@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  linkji-app:
+    image: "heojiye/linkji:latest"
+    command: ["sh", "/cmd/start.sh"]
+    ports:
+      - "8080:8080"
