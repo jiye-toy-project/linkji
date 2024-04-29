@@ -23,3 +23,25 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.register('build-dev') {
+    group = "release"
+    dependsOn('bootJar')
+
+    doLast {
+        copy {
+            from "build/libs"
+            into "dev/build"
+        }
+
+        // 버전에 맞게 실행 스크립트 자동 생성
+        file("dev/build/start.sh").write("export JAVA_HOME=/opt/jdk-17.0.7+7\n"
+                + "export PATH=\$PATH:\$JAVA_HOME/bin\n"
+                + "\n"
+                + "current_time=\$(date +\"%Y-%m-%dT%H:%M:%S\")\n"
+                + "log_file_path=\"../log/linkji_log_\${current_time}.out\"\n"
+                + "\n"
+                + "nohup java -jar linkji-${version}.jar 1>\${log_file_path} 2>&1\n");
+    }
+}
+
